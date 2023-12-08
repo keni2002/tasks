@@ -1,3 +1,3 @@
 node_modules/
-database.json
-models/database.json
+
+src/models/database.json
