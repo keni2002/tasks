@@ -15,13 +15,20 @@ function validate(data,auth){
 
 class Database {
     save(object){
-        fs.writeFileSync(path.join(__dirname,"database.json"), JSON.stringify(object))
+        try{
+            fs.writeFileSync(path.join(__dirname,"database.json"), JSON.stringify(object))
+            return {mensaje: "success"}
+        }
+        catch(error){
+            return {error:error}
+        }
     }
     read(authentication){
         let Datos = JSON.parse(fs.readFileSync(path.join(__dirname,"database.json")));
         return validate(Datos,authentication)
     }
     getData(){
+
         return JSON.parse(fs.readFileSync(path.join(__dirname,"database.json")))
     }
 };
