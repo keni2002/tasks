@@ -8,6 +8,9 @@ A simple Rest APi in Express JS to manage a TODO task list
 
 
 
+## Installation
+Create a json file named database.json inside models folder
+    
 ## Documentation for install Node
 
 [Documentation](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
