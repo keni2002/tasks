@@ -21,15 +21,5 @@
                 "date-target": "2023-12-16 00:00:00"
             }
         ]
-    },
-    "keni": {
-        "auth": [
-            {
-                "pass": "4bad091b4abfc5b48fffd8343c40334d59557c4e70ea6061af9dea8e805c6c97"
-            }
-        ],
-        "data": [
-            {}
-        ]
     }
 }
