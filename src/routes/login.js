@@ -1,13 +1,12 @@
 const { Router } = require('express')
 const router = Router()
 const dataController = require('../models/file');
+const esValid = require('../handlers/esValid');
 const datosJson = new dataController();
-const structureJSON = 
+
 router.post('/signup', (req, res) => {
     const { user, pass } = req.body;
     let data = datosJson.getData();
-
-
     //agregando el usuario 
     data[user] = {
         "auth": [
@@ -21,29 +20,20 @@ router.post('/signup', (req, res) => {
             }
         ]
     }
-
     //volcado de la variable  en database
-    
-
-
-    res.json(datosJson.save(data))
-    
+    return res.json(datosJson.save(data))
 })
+
+
 //barrer los datos
-router.delete('/:user/flush',(req,res)=>{
+router.delete('/:user/flush', (req, res) => {
     //te traes los datos
     let data = datosJson.getData();
-    
-    for( let i in data){
-        if(i === req.params.user){
-            if(data[i]["auth"][0].pass == req.body.pass){
-                data[i]["data"] = {}
-                res.json(datosJson.save(data))
-            }
-            break;
-        }
+    const { user, pass } = req.body
+    if (esValid(data, user, pass)) {
+        data[user]["data"] = {}
+        return res.json(datosJson.save(data))
     }
-    res.json({message:"USER NOT LOGIN"})
-    
+    res.json({ message: "error login" })
 })
 module.exports = router
