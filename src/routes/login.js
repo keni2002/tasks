@@ -17,6 +17,7 @@ router.post('/signup', (req, res) => {
         ],
         "data": [
             {
+                "id": -1
             }
         ]
     }

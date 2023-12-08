@@ -45,13 +45,14 @@ router.post('/add', (req, res) => {
         if (i == req.body.user) {
             if (data[i]["auth"][0].pass == req.body.pass) {
                 //buscar el mayor id
-                let max = 0
+                let max = -2
                 for (let j in data[i]["data"]) {
                     //v de valor
                     let v = data[i]["data"][j]
-                    if (parseInt(v.id) >= max) max = v.id
+                    if (parseInt(v.id) > max) max = v.id
 
                 }
+                
                 //modificando el json data temporal
                 //defino el array de datas
                 let dArray = data[req.body.user]["data"]
@@ -67,12 +68,12 @@ router.post('/add', (req, res) => {
                 //pull fuerte al archivo
 
                 datosJson.save(data)
-                res.json({ message: "success" })
+                return res.json({ message: "success" })
             }
             break;
         }
     }
-    res.json({ message: "error login" })
+    return res.json({ message: "error login" })
 })
 
 
