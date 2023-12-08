@@ -8,14 +8,6 @@ A simple Rest APi in Express JS to manage a TODO task list
 
 
 
-## Installation
-
-Move a json file named database.json inside the folder models. you can do it by typing: 
-
-```bash
-  $ mv database.json src/models
-```
-    
 ## Documentation for install Node
 
 [Documentation](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
@@ -39,6 +31,11 @@ Install dependencies
 
 ```bash
   npm install
+```
+Move a json file named database.json inside the folder models. you can do it by typing: 
+
+```bash
+  $ mv database.json src/models
 ```
 
 Start the server
