@@ -1,17 +1,27 @@
 const { Router } = require('express')
 const router = Router()
-const dataController = require('../models/file');
 const esValid = require('../handlers/esValid');
+const bcrypt = require('bcrypt')
+
+const dataController = require('../models/file');
 const datosJson = new dataController();
 
 router.post('/signup', (req, res) => {
     const { user, pass } = req.body;
     let data = datosJson.getData();
-    //agregando el usuario 
+    //verifico si existe ya el user
+    const existeUser = Object.keys(data).find((u)=> user === u )
+    if(existeUser) return res.json({message:"error user exists"})
+
+    //agregando el usuario
+    //generating hard security hash
+    const saltRounds = 11
+    const newPass = bcrypt.hashSync(pass,saltRounds);
+    
     data[user] = {
         "auth": [
             {
-                "pass": pass
+                "pass": newPass
             }
         ],
         "data": [
