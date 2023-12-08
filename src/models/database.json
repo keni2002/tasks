@@ -22,5 +22,14 @@
             }
         ]
     },
-    "Jose": {}
+    "keni": {
+        "auth": [
+            {
+                "pass": "4bad091b4abfc5b48fffd8343c40334d59557c4e70ea6061af9dea8e805c6c97"
+            }
+        ],
+        "data": [
+            {}
+        ]
+    }
 }

@@ -21,5 +21,8 @@ class Database {
         let Datos = JSON.parse(fs.readFileSync(path.join(__dirname,"database.json")));
         return validate(Datos,authentication)
     }
+    getData(){
+        return JSON.parse(fs.readFileSync(path.join(__dirname,"database.json")))
+    }
 };
 module.exports = Database;
