@@ -7,6 +7,32 @@ const esValid = require('../handlers/esValid')
 const dataController = require('../models/file');
 const datosJson = new dataController();
 
+let myChecker = (datos, usuario, passwd, arrayToCheck) => {
+    if (esValid(datos, usuario, passwd)) {
+        
+        const elements = datos[usuario]["data"]
+        let wasItEdit = false
+
+        for (let i in arrayToCheck) {
+            for (let j in elements) {
+                if (elements[parseInt(j)].id === parseInt(arrayToCheck[i])) {
+                    datos[usuario]["data"][parseInt(j)].checked = !datos[usuario]["data"][parseInt(j)].checked
+                    wasItEdit = true
+                }
+            }
+        }
+        if (wasItEdit) {
+            return datosJson.save(datos)
+        } else return { message: "not match" }
+    }
+    return { message: "error login" }
+}
+router.put('/', (req, res) => {
+    let data = datosJson.getData();
+    const { user, pass, array } = req.body
+    return res.json(myChecker(data, user, pass, array))
+})
+
 router.get('/', (req, res) => {
     let data = datosJson.getData();
     const { user, pass } = req.body
@@ -47,7 +73,7 @@ router.post('/add', (req, res) => {
             "title": req.body.title,
             "description": req.body.description,
             "date": fecha(),
-            "date-target": req.body.dateTarget,
+            "dateTarget": req.body.dateTarget,
             "checked": false
         }
         //pull fuerte al archivo
@@ -62,7 +88,7 @@ let myDelete = (datos, usuario, passwd, arrayToDelete) => {
         //no uso find porque necesito el index puro del array
         const elements = datos[usuario]["data"]
         let wasItDeletion = false
-        
+
         for (let i in arrayToDelete) {
             for (let j in elements) {
                 if (elements[parseInt(j)].id === parseInt(arrayToDelete[i])) {
@@ -89,5 +115,23 @@ router.delete('/delete/:id', (req, res) => {
     let data = datosJson.getData();
     const { user, pass, array } = req.body
     return res.json(myDelete(data, user, pass, [req.params.id]))
+})
+
+router.put('/:id', (req, res) => {
+    if (parseInt(req.params.id) === -1) return { message: "forbidden" }
+    let data = datosJson.getData();
+    const { user, pass,title, description, dateTarget } = req.body;
+    if (esValid(data, user, pass)) {
+        for (let j in data[user]["data"]) {
+            if (data[user]["data"][parseInt(j)].id === parseInt(req.params.id)) {
+               if(title) data[user]["data"][j].title = title
+               if(description) data[user]["data"][j].description = description
+               if(dateTarget) data[user]["data"][j].dateTarget = dateTarget
+               return res.json(datosJson.save(data))
+            }
+        }
+        return res.json({message: "no match"})
+    }
+    return res.json({ message: "error login" })
 })
 module.exports = router;
