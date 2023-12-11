@@ -62,7 +62,7 @@ let myDelete = (datos, usuario, passwd, arrayToDelete) => {
         //no uso find porque necesito el index puro del array
         const elements = datos[usuario]["data"]
         let wasItDeletion = false
-        console.log(arrayToDelete[0])
+        
         for (let i in arrayToDelete) {
             for (let j in elements) {
                 if (elements[parseInt(j)].id === parseInt(arrayToDelete[i])) {
@@ -88,9 +88,6 @@ router.delete('/delete/some', (req, res) => {
 router.delete('/delete/:id', (req, res) => {
     let data = datosJson.getData();
     const { user, pass, array } = req.body
-    for (let i in array) {
-        console.log(parseInt(array[i]))
-    }
     return res.json(myDelete(data, user, pass, [req.params.id]))
 })
 module.exports = router;
