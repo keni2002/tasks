@@ -56,31 +56,41 @@ router.post('/add', (req, res) => {
     return res.json({ message: "error login" })
 })
 
-router.delete('/delete/:id', (req, res) => {
-    let data = datosJson.getData();
-    const { user, pass } = req.body
-    if (esValid(data, user, pass)) {
+//metodo que une se usa para los metodos de eliminar y eliminacion masiva
+let myDelete = (datos, usuario, passwd, arrayToDelete) => {
+    if (esValid(datos, usuario, passwd)) {
         //no uso find porque necesito el index puro del array
-        const elements = data[user]["data"]
-
-        let taskFound = () => {
-            for (let i in elements) {
-                
-                if( elements[parseInt(i)].id == req.params.id){
-                    return true
+        const elements = datos[usuario]["data"]
+        let wasItDeletion = false
+        console.log(arrayToDelete[0])
+        for (let i in arrayToDelete) {
+            for (let j in elements) {
+                if (elements[parseInt(j)].id === parseInt(arrayToDelete[i])) {
+                    if (parseInt(arrayToDelete[i]) === -1) return { message: "forbidden" }
+                    datos[usuario]["data"] = datos[usuario]["data"].filter((d) => d.id != arrayToDelete[i])
+                    wasItDeletion = true
                 }
             }
-            return false
         }
-        
-        if (taskFound()) {
-            data[user]["data"] = data[user]["data"].filter((d)=> d.id != req.params.id )
-            //volcado
-            return res.json(datosJson.save(data))
-        }
-
-        else return res.status(404).json({ message: "error no source" })
+        if (wasItDeletion) {
+            return datosJson.save(datos)
+        } else return { message: "not match" }
     }
-    return res.json({ message: "error login" })
+    return { message: "error login" }
+} //end mydelete funct
+//importante que esto este arriba de one delete
+router.delete('/delete/some', (req, res) => {
+    let data = datosJson.getData();
+    const { user, pass, array } = req.body
+    return res.json(myDelete(data, user, pass, array))
+})
+
+router.delete('/delete/:id', (req, res) => {
+    let data = datosJson.getData();
+    const { user, pass, array } = req.body
+    for (let i in array) {
+        console.log(parseInt(array[i]))
+    }
+    return res.json(myDelete(data, user, pass, [req.params.id]))
 })
 module.exports = router;
